@@ -86,3 +86,18 @@ printf('<p>Student 1 : %03d, Student2: %03d, Student3: %03d</p>', $student1, $st
 // Variable inspection
 $sampleArray = ['Joe', 12, 11.23, true, new stdClass()];
 echo "<p>The first item in the array is $sampleArray[0].</p>";
+
+echo '<p>Viewing the entire array with print_r();</p>';
+print_r($sampleArray);
+
+echo '<p>Viewing all details with var_dump():,/p>';
+var_dump($sampleArray);
+
+// Checking if a variable exists
+$firstVar = 100;
+$secondVar = null;
+
+echo '<p>First variable: ' . (isset($firstVar) ? 'Is Set' : 'Not Set') . '</p>';
+echo '<p>Second variable: ' . (isset($secondVar) ? 'Is Set' : 'Not Set') . '</p>';
+
+$firstVar;

@@ -16,6 +16,12 @@
                     <li class="nav-item">
                         <a class="nav-link <?= $_SERVER['SCRIPT_NAME'] === '/aboutmariadb.php' ? 'active' : '' ?>" href="aboutmariadb.php">About MariaDB</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $_SERVER['SCRIPT_NAME'] === '/phpinfo.php' ? 'active' : '' ?>" href="phpinfo.php">PHP Info</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $_SERVER['SCRIPT_NAME'] === '/phpsummary.php' ? 'active' : '' ?>" href="phpsummary.php">PHP Summary</a>
+                    </li>
                 </ul>
             </div>
         </div>

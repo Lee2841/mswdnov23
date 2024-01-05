@@ -15,7 +15,7 @@
         <p>Welcome to the <strong>Learning PHP</strong> home page!</p>
         <p>Select a link above to start learning. about a language with <?= $phpAge->y ?> years of heritage!</p>
     </div>
-    
+    <?php include 'includes /footer.php' ?>
 </body>
 
 </html>

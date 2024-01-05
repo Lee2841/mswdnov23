@@ -19,7 +19,7 @@
             <small><em>Last updated: <?= date("Y-m-d H:i:s.", filemtime("aboutphp.php")) ?></em></small>
         </p>
     </div>
-
+    <?php include 'includes /footer.php' ?>
 </body>
 
 </html>
