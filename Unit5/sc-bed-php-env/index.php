@@ -1,18 +1,28 @@
 <?php
-var_dump($_POST);
 
-$email = '';
-$comments = '';
-$maxSize = ini_get('upload_max_filesize');
-$errors = [];
+    session_start();
+    $email = '';
+    $comments = '';
+    $maxSize = ini_get('upload_max_filesize');
+    $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+        $user = filter_input(INPUT_POST,'user', FILTER_SANITIZE_STRING);
+        $_SESSION['username'] = $user;
 
-    if (isset($_POST)['email'] && $_POST['email'] !== '') {
-        if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        $rememberMe = filter_input(INPUT_POST, 'remember', FILTER_DEFAULT);     
+        if ($rememberMe) {         
+            setcookie('username', $user, time() + 604800,'/'); 
+
+        } 
+        
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        if (isset($_POST['email']) && $_POST['email'] !== '') {
+            if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
             $email = $_POST['email'];
-        }  else {
-            $errors[] = "Email address is invalid.";
+            }  else {
+                $errors[] = "Email address is invalid.";
         }
 
     } else {
@@ -133,6 +143,29 @@ if (isset($_FILES['uploadedFile']) && is_uploaded_file($_FILES['uploadedFile']['
         <label style="display: inline-block; width: 100px;"></label>
         <input type="submit" value="Send">
     </form>
+
+
+    <?php
+    if (isset($_SESSION['username'])) {
+        printf('<h3>Welcome back, %s', $_SESSION['username']);
+    } elseif (isset($_COOKIE['username'])) {     
+        $_SESSION['username'] = $_COOKIE['username'];     
+        printf('<h3>Welcome back, %s', $_SESSION['username']);
+    } else {
+    ?>
+    <form name="welcomeForm" method="post" action="index.php" style="margin-top: 20px;">
+        <label for="username" style="">Username</label>
+        <input type="text" name="username" id="username" required>
+        <input type="hidden" name="action" value="saveUser">
+        <input type="submit" value="Save"><br><br>
+        <label style="display: inline-block; width: 100px;"></label>     
+        <input type="checkbox" name="remember" value="remember">Remember me<br><br>     
+        <label style="display: inline-block; width: 100px;"></label> 
+    </form>
+    <?php } ?>
+
+
+
     <script>
     document.getElementById('contactForm').addEventListener('submit', validateForm); 
     
@@ -148,7 +181,7 @@ if (isset($_FILES['uploadedFile']) && is_uploaded_file($_FILES['uploadedFile']['
             el.classList.remove('validation_invalid');         
         });         
         // Email         
-        const re = GET_FROM_GIST;         
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;         
         const email = document.getElementById('email');         
         if (email.value === '' || !re.test(email.value.toLowerCase())) {             
             contains_errors = true;             

@@ -45,6 +45,7 @@ function sumVariadic(...$nums)
 }
 printf('<p>Adding numbers together: %d</p>', sumVariadic(10, 87, 42, 56));
 $garage = ['Kia', 'BMW', 'Tesla', 'Ford']
+
 function getVehicle($carNumber = 0)
 {
     global $garage;
