@@ -40,7 +40,7 @@
     }
 
     if (count($errors) === 0) {
-        printf('<p>Received email %s ad comments %s </p>', $email, $comments)
+        printf('<p>Received email %s ad comments %s </p>', $email, $comments);
         if (isset($_POST['reason']) > 0) {
             echo '<p>Reasons for contacting us:</p>';
             echo '<ul>';
