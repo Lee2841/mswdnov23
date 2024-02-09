@@ -21,8 +21,8 @@ echo '<br><br>';
 print_r($company);
 
 // Accessing array values
-printf('<p>The second cirt is %s', $cities[1]);
-print('<p>The CEO of the company is %s', $company['CEO']);
+printf('<p>The second city is %s', $cities[1]);
+printf('<p>The CEO of the company is %s', $company['CEO']);
 
 // Getting the size of the array
 printf('There are %d cities in the array', count($cities));
@@ -52,5 +52,5 @@ $search = 'Titan';
 if (in_array($search, $jupiterMoons)) {
     printf('<p>%s is a moon of Juputer </p>', $search);
 } else {
-    print('<p>%s is not a moon of Jupiter</p>', $search);
+    printf('<p>%s is not a moon of Jupiter</p>', $search);
 }
