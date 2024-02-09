@@ -44,7 +44,7 @@ function sumVariadic(...$nums)
     return $total;
 }
 printf('<p>Adding numbers together: %d</p>', sumVariadic(10, 87, 42, 56));
-$garage = ['Kia', 'BMW', 'Tesla', 'Ford']
+$garage = ['Kia', 'BMW', 'Tesla', 'Ford'];
 
 function getVehicle($carNumber = 0)
 {
@@ -104,17 +104,17 @@ print_r($result);
 // Fat-arrow functions can only have 1 line of code
 // This is a closure (i.e. an anonoymous function used as an argument to another function)
 $freeThreshold = 40;
-$processedCart = array_map{
+$processedCart = array_map(
     function($price) use($freeThreshold){
-        $deliver = ''
+        $delivery = '';
         if ($price > $freeThreshold) {
             $delivery = 'Free Delivery';
         }
-        return '€'. number_format($price, 2, '.', '.') . "$delivery";
+        return '€'. number_format($price, 2, '.', '.') . " $delivery";
     },
     $productPrices
-}
-print_r($processedCart)
+);
+print_r($processedCart);
 // Type Hinting
 function showCartTotal(array $cartItems, string $currency, bool $rightPlacement, float $freeThreshold)
 {

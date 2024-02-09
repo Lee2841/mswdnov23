@@ -55,7 +55,7 @@ switch ($action) {
     case 'delete':
         deleteStudent();
     case 'sort':
-        sortStudent();
+        sortStudents();
         break;
 }
 
@@ -158,7 +158,7 @@ function sortStudents()
                             <?php
                             // TODO Show results here
                             foreach ($studentList as $key => $student)  {
-                                v printf(                                     
+                                 printf(                                     
                                     '<tr><td>%3d</td><td>%s</td><td>%s</td><td>%d</td><td>%s</td></tr>', 
                                     $key,                                     
                                     $student['name'],                                     
