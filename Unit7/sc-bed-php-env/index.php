@@ -2,7 +2,13 @@
 namespace unit7;
 require 'lib/com/icemalta/libpayroll/payroll.php';
 
-use com\icemalta\libpayroll\Employee as PayrollEmployee;
+use com\icemalta\libpayroll\{
+    Employee as PayrollEmployee,
+    Manager as PayrollManager,
+    Contractor as PayrollContractor,
+    Worker as PayrollWorker,
+    StaffMember
+};
 
 class Employee
 {
@@ -170,6 +176,32 @@ $emp1 = new Employee('Alice', 'Anderson', 'CTO');
 $emp2 = new Employee('Bob', 'Parker', 'CMO');
 $emp3 = new Employee('Claire', 'Curmi', 'Junior Programmer', 15);
 $emp4 = new TeamLead('Dave', 'Dimech', 'Lead Programmer', 30, true, 4000);
+
+$divResult = null;
+
+if(filter_var($_SERVER['REQUEST_METHOD'], FILTER_DEFAULT) === 'POST') {
+    $action = filter_input(INPUT_POST,'action', FILTER_DEFAULT);
+    switch ($action) {
+        case 'divide':
+            global $divResult;
+            $num1 = filter_input(INPUT_POST,'num1', FILTER_DEFAULT);
+            $num2 = filter_input(INPUT_POST,'num2', FILTER_DEFAULT);
+            try {
+                $divResult = simpleDivision($num1, $num2);
+            } catch (\Error $e) {
+                $divResult = 'Make sure both num1 and num2 are numbers!';
+                error_log('An error occured in index.php on lin 184.');
+            } catch (\DivisionByZeroError $e) {
+                $divResult = 'You cannot divide by zero!';
+            } // Lesson 14 1:39
+            break;
+    }
+}
+
+function simpleDivision(float $num1, float $num2): float {
+    return $num1 / $num2;
+}
+
 ?>
 
 <!doctype html>
@@ -245,9 +277,45 @@ $emp4 = new TeamLead('Dave', 'Dimech', 'Lead Programmer', 30, true, 4000);
     </table>
     <h3>Using the Payroll Library</h3>
     <?php
-        $joe = new PayrollEmployee();
+        $joe = new PayrollEmployee('Joe', 'Doe');
         echo "<p>{$joe->getPaySlip()}</p>";
-            ?>
-    </body>
 
+        $humas = [
+            new PayrollEmployee('Joseph', 'Galea'),
+            new PayrollManager('Gail', 'Vassallo').
+            new PayrollContractor('Nikolai', 'Sammut')
+        ];
+
+        foreach($humas as $human) {
+            echo describeHuman($human);
+        }
+
+        function describeHuman(PayrollWorker $human): string
+        {
+            $result = sprintf('<p>%s %s (%s),/p>', $human->getName(), $human->getSurname(), $human->getRoleDescription());
+            if ($human instanceof StaffMember) {
+                $result .= "<p>Health: {$human->getHealthBenefitsString()}</p>";
+                $result .- "<p>Perks: {$human->getPerksString()}</p>";
+            }
+            $ps = $human->getPayslipDetails();
+            $result .= "<p>Payslip ({$ps['currency']}): {$ps['content']}</p>";
+            return $result;
+        }
+    ?>
+
+    <h3>Simple Division</h3>
+    <?php
+    if (isset($divResult)) {
+            echo $divResult;
+        }
+    ?>
+    <form name="divideForm" method="POST">
+            <input type="hidden" name="action" value="divide">
+            <label for="num1">Num 1</label>
+            <input type="text" name="num1">
+            <label for="num2">Num 2</label>
+            <input type="text" name="num2">
+            <input type="Submit" value="Divide">
+        </form>      
+    </body>
 </html>
