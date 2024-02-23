@@ -14,8 +14,9 @@ trait PayslipMetaData
     }
 }
 
-class Worker
+abstract class Worker
 {
+    use PayslipMetaData;
     private string $name;
     private string $surname;
 
@@ -25,8 +26,8 @@ class Worker
         $this->surname = $surname;
     }
 
-    abstract public function getRoleDescription(): string
-
+    abstract public function getRoleDescription(): string;
+    
     public function getName(): string
     {
         return $this->name;
