@@ -193,7 +193,7 @@ if(filter_var($_SERVER['REQUEST_METHOD'], FILTER_DEFAULT) === 'POST') {
                 error_log('An error occured in index.php on lin 184.');
             } catch (\DivisionByZeroError $e) {
                 $divResult = 'You cannot divide by zero!';
-            } // Lesson 14 1:39
+            }
             break;
     }
 }
