@@ -1,10 +1,11 @@
 document.addEventListener("DOMContentLoaded", init);
-const BASE_URI = 'http://localhost:8000/api/todopal/api/';
+const BASE_URI = 'http://localhost:8000/todopal/api/';
 let todos = [];
 function init() {
     setInitialColourMode();
     checkAndRedirect('home', loadTodos);
 }
+
 function setInitialColourMode() {
     let colorMode = localStorage.getItem("todopal_color")
     if (colorMode) {
@@ -13,6 +14,7 @@ function setInitialColourMode() {
         toggleColourMode(window.matchMedia('(prefers-color-scheme: dark)') ? 'dark' : 'light');
     }
 }
+
 function toggleColourMode(mode) {
     document.documentElement.setAttribute("data-bs-theme", mode);
     const switcher = document.getElementById('color-switch-area');
@@ -26,14 +28,14 @@ function toggleColourMode(mode) {
 async function showView(view) {
     if (view) {
         return fetch(`includes/${view}.html`)
-            .then(res => res.text())
-            .then(html => document.getElementById('mainContent').innerHTML = html);
+        .then(res => res.text())
+        .then(html => document.getElementById('mainContent').innerHTML = html);
     }
     return null;
 }
 
 async function isValidToken(token, user, cb) {
-    return fetch(`${BASE_URI}token`, {
+    return fetch(`${BASE_URI}/token`, {
         headers: {
             'X-Api-Key': token,
             'X-Api-User': user
@@ -68,6 +70,7 @@ function checkAndRedirect(redirect = null, cb = null) {
 function bindLogin(redirect, cb) {
     document.getElementById('loginForm').addEventListener('submit', (evt) => {
         evt.preventDefault();
+        console.log('test');
         fetch(`${BASE_URI}login`, {
             mode: 'cors',
             method: 'POST',
@@ -80,6 +83,26 @@ function bindLogin(redirect, cb) {
                 showView(redirect).then(cb);
             })
             .catch(err => showMessage(err, 'danger'));
+    });
+}
+
+function bindHome() {
+    document.getElementById('todoForm').addEventListener('submit', (evt) => {
+        evt.preventDefault();
+        todoData = new FormData(document.getElementById('todoForm'));
+        checkAndRedirect('home', () => {
+            fetch(`${BASE_URI}todo`, {
+                mode: 'cors',
+                method: 'POST',
+                headers: {
+                    'X-Api-Key': localStorage.getItem("todopal_token"),
+                    'X-Api-User': localStorage.getItem("todopal_user")
+                },
+                body: todoData
+            })
+                .then(loadTodos)
+                .catch(err => console.error(err));
+        });
     });
 }
 
@@ -96,11 +119,11 @@ function loadTodos() {
             .then(res => res.json())
             .then(res => {
                 todos = res.data;
-                console.log(displayTodos);
+                console.log('Todos displayed:', todos);
                 displayTodos();
                 bindHome();
             })
-            .catch(err => showMessage(err, 'danger'));
+            .catch(err => console.error(err));
     });
 }
 
@@ -134,26 +157,6 @@ function displayTodos() {
     document.getElementById('todo-items').innerHTML = html;
 }
 
-
-function bindHome() {
-    document.getElementById('todoForm').addEventListener('submit', (evt) => {
-        evt.preventDefault();
-        todoData = new FormData(document.getElementById('todoForm'));
-        checkAndRedirect('home', () => {
-            fetch(`${BASE_URI}todo`, {
-                mode: 'cors',
-                method: 'POST',
-                headers: {
-                    'X-Api-Key': localStorage.getItem("todopal_token"),
-                    'X-Api-User': localStorage.getItem("todopal_user")
-                },
-                body: todoData
-            })
-                .then(loadTodos)
-                .catch(err => showMessage(err, 'danger'));
-        });
-    });
-}
 
 function deleteTodo
     (localTodoId) {
@@ -208,3 +211,8 @@ function registerUser() {
     });
     });
    }
+   
+
+   function showMessage(message) {
+    print("error")
+}
